@@ -149,7 +149,7 @@ body {
   width: 100%;
   height: 100vh;
   /* margin-bottom: 60px; */
-  position: relative; 
+  position: relative;
 }
 
 .carousel {
@@ -187,12 +187,10 @@ body {
   display: block;
 }
 
-
 .slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-
 }
 
 /* Slick Dots Styles */
@@ -227,11 +225,12 @@ body {
   position: absolute;
   top: 35%;
   left: 10%;
-  color: var(--white-color);
   z-index: 2;
+  color: var(--white-color);
 }
 
 .movie-details h1 {
+  color: rgb(255, 251, 0);
   margin-bottom: 20px;
   font-size: 4rem;
   font-weight: 900;
@@ -242,21 +241,19 @@ body {
   text-align: justify;
 }
 
-.movie-details ul {
-  margin-top: 10px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.movie-details ul li {
-  margin-right: 40px;
-  font-weight: 700;
-}
-
 .genre {
+  margin: 60px 0 0 20px;
+}
+
+.genre ul {
   display: flex;
-  margin-left: 20px;
-  margin-top: 60px;
+  gap: 40px;
+}
+
+.genre ul li::marker {
+  color: rgb(234, 255, 0);
+  font-size: 1.5rem;
+  font-weight: bolder;
 }
 
 /* Slide buttons and hero section content styles */
@@ -332,6 +329,23 @@ body {
 }
 
 /* movie-cards */
+.heading-title {
+  margin-bottom: 44px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.heading-title > h3 {
+  color: var(--white-color);
+  padding: 20px 0 20px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 100px;
+  /* z-index: 10; */
+}
 .card-container {
   margin-bottom: 44px;
   padding-top: 16px;
@@ -345,16 +359,6 @@ body {
 
 .card-container::-webkit-scrollbar {
   display: none;
-}
-
-.card-container > h3 {
-  color: var(--white-color);
-  padding: 20px 0 20px 10px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-left: 100px;
-  /* z-index: 10; */
 }
 
 .gradient {
@@ -402,7 +406,13 @@ body {
   transform: scale(1.1);
 }
 
-.card-previous-btn {
+.cardTitle {
+  color: var(--white-color);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* .card-previous-btn {
   display: none;
   width: 90px;
   height: 240px;
@@ -424,7 +434,7 @@ body {
   top: 7%;
   right: 0;
   z-index: 2;
-}
+} */
 
 /* video container */
 

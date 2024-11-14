@@ -43,7 +43,12 @@ const fetchCardData = (url, container) => {
         img.alt = "Movie Poster";
         img.loading = "lazy";
 
+        const movieTitle = document.createElement("h4");
+        movieTitle.classList.add("cardTitle");
+        movieTitle.textContent = movie.original_title;
+
         card.appendChild(img);
+        card.appendChild(movieTitle);
         fragment.appendChild(card);
       }
 
@@ -82,7 +87,6 @@ const fetchCarousel = (url) => {
         images.forEach((movie, index) => {
           const slides = document.createElement("div");
           slides.classList.add("slide");
-          
 
           if (index === 0) {
             slides.classList.add("active");
@@ -95,6 +99,15 @@ const fetchCarousel = (url) => {
           img.loading = "lazy";
 
           slides.appendChild(img);
+          slides.appendChild(
+            movie_Info(
+              movie.title,
+              movie.overview,
+              movie.original_language,
+              movie.popularity,
+              movie.release_date
+            )
+          );
           fragment.appendChild(slides);
         });
       };
@@ -108,30 +121,74 @@ const fetchCarousel = (url) => {
 
 fetchCarousel(customeUrl("upcoming"));
 
+const movie_Info = (title, overview, language, popularity, release) => {
+  const moviefragment = document.createDocumentFragment();
+
+  const movieDetails = document.createElement("div");
+  movieDetails.classList.add("movie-details");
+
+  const movieTitle = document.createElement("h1");
+  movieTitle.classList.add("title");
+  movieTitle.textContent = title;
+
+  const movieOverview = document.createElement("h3");
+  movieOverview.classList.add("overview");
+  let words = overview.split(" ");
+  if (words.length > 20) {
+    movieOverview.textContent = words.slice(0, 20).join(" ") + "...";
+  } else {
+    movieOverview.textContent = words;
+  }
+
+  const movieGenre = document.createElement("div");
+  movieGenre.classList.add("genre");
+
+  // movie list
+  const movielist = document.createElement("ul");
+
+  const movie_lang = document.createElement("li");
+  movie_lang.classList.add("language");
+
+  if (language === "hi") language = "Hindi";
+  else if (language === "en") language = "English";
+
+  movie_lang.textContent = `Language - ${language}`;
+
+  const movie_popularity = document.createElement("li");
+  movie_popularity.classList.add("popularity");
+  movie_popularity.textContent = `Views - ${popularity}M`;
+
+  const movie_release = document.createElement("li");
+  movie_release.classList.add("release");
+  movie_release.textContent = `Release on - ${release}`;
+
+  movielist.append(movie_lang, movie_popularity, movie_release);
+
+  movieGenre.appendChild(movielist);
+
+  movieDetails.append(movieTitle, movieOverview, movieGenre);
+
+  return movieDetails;
+};
+
 // Carousel Logic
 let currentIndex = 0;
 
 function showNextImage() {
-  const slides = document.querySelectorAll(".slide"); 
+  const slides = document.querySelectorAll(".slide");
   slides[currentIndex].classList.remove("active");
 
-
-  if(currentIndex < slides.length -1){
-    currentIndex++
-  }
-  if(currentIndex > slides.length -1){
-    currentIndex--
+  if (currentIndex < slides.length - 1) {
+    currentIndex++;
   }
 
   slides[currentIndex].classList.add("active");
-
 }
 
 function showPrevImage() {
   const slides = document.querySelectorAll(".slide");
   slides[currentIndex].classList.remove("active");
 
-  // Decrement index for the previous button, but don't go below the first slide
   if (currentIndex > 0) {
     currentIndex--;
   }
@@ -140,13 +197,11 @@ function showPrevImage() {
 }
 
 if (nextBtn) {
-  nextBtn.addEventListener('click', showNextImage);
+  nextBtn.addEventListener("click", showNextImage);
 }
-
 
 if (prevBtn) {
-  prevBtn.addEventListener('click', showPrevImage);
+  prevBtn.addEventListener("click", showPrevImage);
 }
 
-// Set an interval to cycle through images every 3 seconds
 // setInterval(showNextImage, 3000);
