@@ -7,17 +7,19 @@ const upcomingContainer = document.querySelector(".upcoming-content");
 const latestContainer = document.querySelector(".latest-content");
 const nowPlayingContainer = document.querySelector(".nowplaying-content");
 
-const slide = document.querySelector(".slide")
+// Carousel
+const slide = document.querySelector(".slide");
+const prevBtn = document.querySelector(".prev-btn");
+const nextBtn = document.querySelector(".next-btn");
 
-const customeUrl = (type)=>{
+// Default API URL
+const customeUrl = (type) => {
   const defaultUrl = `${API_URL}${type}?language=en-US&page=1&region=IN&api_key=${API_KEY}`;
-  return defaultUrl
-}
-
-const peopleUrl = `https://api.themoviedb.org/3/person/popular`
+  return defaultUrl;
+};
 
 // Default image URL
-const imageURL = (url) => `https://image.tmdb.org/t/p/w500${url}`;
+const imageURL = (url) => `https://image.tmdb.org/t/p/original${url}`;
 
 // fetch data
 const fetchCardData = (url, container) => {
@@ -41,7 +43,6 @@ const fetchCardData = (url, container) => {
         img.alt = "Movie Poster";
         img.loading = "lazy";
 
-
         card.appendChild(img);
         fragment.appendChild(card);
       }
@@ -58,42 +59,94 @@ fetchCardData(customeUrl("upcoming"), upcomingContainer);
 fetchCardData(customeUrl("popular"), latestContainer);
 fetchCardData(customeUrl("now_playing"), nowPlayingContainer);
 
+// fetching carousel data
 
-// fetching carousel data 
+const carousel = document.querySelector(".carousel");
 
-// const fetchCarousel = (url)=>{
-//   fetch(url)
-//   .then((response)=>{
-//     if(!response.ok){
-//       throw new Error("There is some error");
-//     }
-//     return response.json()
-//   })
-//   .then((data)=>{
-//     if(!data.results){
-//       return
-//     }
-//     const fragment = document.createDocumentFragment()
-//     for (const movie of data.results) {
-//       console.log(movie)
-//       if (!movie.poster_path) continue;
+const fetchCarousel = (url) => {
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("There is some error");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (!data.results) {
+        return;
+      }
+      const imageArray = data.results.filter((movie) => movie.backdrop_path);
 
-//         const card = document.createElement("div");
-//         card.classList.add("card");
+      const fragment = document.createDocumentFragment();
+      const createCarouselImage = (images) => {
+        images.forEach((movie, index) => {
+          const slides = document.createElement("div");
+          slides.classList.add("slide");
+          
 
-//         const img = document.createElement("img");
-//         img.src = imageURL(movie.poster_path);
-//         console.log(img)
-//         img.alt = "Movie Poster";
-//         img.loading = "lazy";
+          if (index === 0) {
+            slides.classList.add("active");
+          }
+
+          const img = document.createElement("img");
+          img.src = imageURL(movie.backdrop_path);
+          img.classList.add("carousel-img");
+          img.alt = "Movie Poster";
+          img.loading = "lazy";
+
+          slides.appendChild(img);
+          fragment.appendChild(slides);
+        });
+      };
+      createCarouselImage(imageArray);
+      carousel.appendChild(fragment);
+    })
+    .catch((error) => {
+      console.log("There is an error in fetching data:", error);
+    });
+};
+
+fetchCarousel(customeUrl("upcoming"));
+
+// Carousel Logic
+let currentIndex = 0;
+
+function showNextImage() {
+  const slides = document.querySelectorAll(".slide"); 
+  slides[currentIndex].classList.remove("active");
 
 
-//         card.appendChild(img);
-//         fragment.appendChild(card);
-//     }
-//     slide.appendChild(fragment)
-//   })
-// }
+  if(currentIndex < slides.length -1){
+    currentIndex++
+  }
+  if(currentIndex > slides.length -1){
+    currentIndex--
+  }
 
-// fetchCarousel(customeUrl("upcoming"))
+  slides[currentIndex].classList.add("active");
 
+}
+
+function showPrevImage() {
+  const slides = document.querySelectorAll(".slide");
+  slides[currentIndex].classList.remove("active");
+
+  // Decrement index for the previous button, but don't go below the first slide
+  if (currentIndex > 0) {
+    currentIndex--;
+  }
+
+  slides[currentIndex].classList.add("active");
+}
+
+if (nextBtn) {
+  nextBtn.addEventListener('click', showNextImage);
+}
+
+
+if (prevBtn) {
+  prevBtn.addEventListener('click', showPrevImage);
+}
+
+// Set an interval to cycle through images every 3 seconds
+// setInterval(showNextImage, 3000);

@@ -7,6 +7,10 @@
   font-family: "Noto Sans", sans-serif;
 }
 
+:root {
+  --white-color: #fff;
+}
+
 /* Scrollbar styles */
 ::-webkit-scrollbar {
   width: 10px;
@@ -37,7 +41,7 @@ body {
   align-items: center;
   justify-content: space-between;
   position: fixed;
-  color: #fff;
+  color: var(--white-color);
   z-index: 4;
 }
 
@@ -99,7 +103,7 @@ body {
 }
 
 .nav-menu > ul > li:hover {
-  color: #fff;
+  color: var(--white-color);
 }
 
 .nav-menu > ul > li::after {
@@ -114,7 +118,7 @@ body {
 }
 
 .nav-menu > ul > li:hover::after {
-  background-color: #fff; /* Change background color on hover */
+  background-color: var(--white-color); /* Change background color on hover */
 }
 
 .nav-profile {
@@ -145,7 +149,7 @@ body {
   width: 100%;
   height: 100vh;
   /* margin-bottom: 60px; */
-  position: relative; /* Added position relative */
+  position: relative; 
 }
 
 .carousel {
@@ -183,14 +187,16 @@ body {
   display: block;
 }
 
+
 .slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+
 }
 
 /* Slick Dots Styles */
-.slick-dots {
+/* .slick-dots {
   position: absolute;
   bottom: 12%;
   right: 8%;
@@ -215,13 +221,13 @@ body {
 
 .dot.slick-active {
   background-color: rgb(255, 255, 255);
-}
+} */
 
 .movie-details {
   position: absolute;
   top: 35%;
   left: 10%;
-  color: #fff;
+  color: var(--white-color);
   z-index: 2;
 }
 
@@ -305,13 +311,13 @@ body {
   justify-content: center;
   align-items: center;
   background-color: transparent;
-  color: #fff;
+  color: var(--white-color);
   border: none;
   cursor: pointer;
 }
 
 .play-btn {
-  background-color: #fff;
+  background-color: var(--white-color);
   color: #000;
   border: none;
   border-radius: 15px;
@@ -342,7 +348,7 @@ body {
 }
 
 .card-container > h3 {
-  color: #fff;
+  color: var(--white-color);
   padding: 20px 0 20px 10px;
   display: flex;
   align-items: center;
@@ -354,7 +360,7 @@ body {
 .gradient {
   content: "";
   position: absolute;
-  top: 0; /* Adjust top position based on the height of h3 and its margin */
+  top: 0;
   left: 0;
   width: 2430px;
   height: calc(100% - 35.625% - 39px); /* Adjust height as needed */
@@ -393,7 +399,7 @@ body {
 }
 
 .card img:hover {
-  transform: scale(1.10);
+  transform: scale(1.1);
 }
 
 .card-previous-btn {
@@ -465,7 +471,7 @@ body {
 /* footer */
 footer {
   background-color: #111111;
-  color: #fff;
+  color: var(--white-color);
 }
 
 .footer-container {
