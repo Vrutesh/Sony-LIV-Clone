@@ -8,9 +8,10 @@ const latestContainer = document.querySelector(".latest-content");
 const nowPlayingContainer = document.querySelector(".nowplaying-content");
 
 // Carousel
-const slide = document.querySelector(".slide");
 const prevBtn = document.querySelector(".prev-btn");
+prevBtn.setAttribute("aria-label", "Previous slide");
 const nextBtn = document.querySelector(".next-btn");
+nextBtn.setAttribute("aria-label", "Next slide");
 
 // Default API URL
 const customeUrl = (type) => {
@@ -22,41 +23,42 @@ const customeUrl = (type) => {
 const imageURL = (url) => `https://image.tmdb.org/t/p/original${url}`;
 
 // fetch data
-const fetchCardData = (url, container) => {
-  fetch(url)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("There is some error");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      const fragment = document.createDocumentFragment();
-      for (const movie of data.results) {
-        if (!movie.backdrop_path) continue;
+const fetchCardData = async (url, container) => {
+  try {
+    const response = await fetch(url);
 
-        const card = document.createElement("div");
-        card.classList.add("card");
+    if (!response.ok) {
+      throw new Error("There is some error");
+    }
+    const data = await response.json();
+    const imageArray = data.results;
 
-        const img = document.createElement("img");
-        img.src = imageURL(movie.backdrop_path);
-        img.alt = "Movie Poster";
-        img.loading = "lazy";
+    const fragment = document.createDocumentFragment();
 
-        const movieTitle = document.createElement("h4");
-        movieTitle.classList.add("cardTitle");
-        movieTitle.textContent = movie.original_title;
+    for (const movie of imageArray) {
+      if (!movie.backdrop_path) continue;
 
-        card.appendChild(img);
-        card.appendChild(movieTitle);
-        fragment.appendChild(card);
-      }
+      const card = document.createElement("div");
+      card.classList.add("card");
 
-      container.appendChild(fragment);
-    })
-    .catch((error) => {
-      console.log("There is an error in fetching data:", error);
-    });
+      const img = document.createElement("img");
+      img.src = imageURL(movie.backdrop_path);
+      img.alt = "Movie Poster";
+      img.loading = "lazy";
+
+      const movieTitle = document.createElement("h4");
+      movieTitle.classList.add("cardTitle");
+      movieTitle.textContent = movie.original_title;
+
+      card.appendChild(img);
+      card.appendChild(movieTitle);
+      fragment.appendChild(card);
+    }
+
+    container.appendChild(fragment);
+  } catch (error) {
+    console.log("There is an error in fetching data:", error);
+  }
 };
 
 // Fetch movies for different categories
@@ -68,59 +70,59 @@ fetchCardData(customeUrl("now_playing"), nowPlayingContainer);
 
 const carousel = document.querySelector(".carousel");
 
-const fetchCarousel = (url) => {
-  fetch(url)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("There is some error");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (!data.results) {
-        return;
-      }
-      const imageArray = data.results.filter((movie) => movie.backdrop_path);
+const fetchCarousel = async (url) => {
+  try {
+    const response = await fetch(url);
 
-      const fragment = document.createDocumentFragment();
-      const createCarouselImage = (images) => {
-        images.forEach((movie, index) => {
-          const slides = document.createElement("div");
-          slides.classList.add("slide");
+    if (!response.ok) {
+      throw new Error("There is some error");
+    }
 
-          if (index === 0) {
-            slides.classList.add("active");
-          }
+    const data = await response.json();
+    const carouselArray = data.results;
 
-          const img = document.createElement("img");
-          img.src = imageURL(movie.backdrop_path);
-          img.classList.add("carousel-img");
-          img.alt = "Movie Poster";
-          img.loading = "lazy";
+    if (!carouselArray || carouselArray.length === 0) return;
 
-          slides.appendChild(img);
-          slides.appendChild(
-            movie_Info(
-              movie.title,
-              movie.overview,
-              movie.original_language,
-              movie.popularity,
-              movie.release_date
-            )
-          );
-          fragment.appendChild(slides);
-        });
-      };
-      createCarouselImage(imageArray);
-      carousel.appendChild(fragment);
-    })
-    .catch((error) => {
-      console.log("There is an error in fetching data:", error);
-    });
+    const imageArray = carouselArray.filter((movie) => movie.backdrop_path);
+
+    const fragment = document.createDocumentFragment();
+
+    const createCarouselImage = (images) => {
+      images.forEach((movie, index) => {
+        const slides = document.createElement("div");
+        slides.classList.add("slide");
+
+        if (index === 0) slides.classList.add("active");
+
+        const img = document.createElement("img");
+        img.src = imageURL(movie.backdrop_path);
+        img.classList.add("carousel-img");
+        img.alt = "Movie-Poster";
+        img.loading = "lazy";
+
+        slides.appendChild(img);
+        slides.appendChild(
+          movie_Info(
+            movie.title,
+            movie.overview,
+            movie.original_language,
+            movie.popularity,
+            movie.release_date
+          )
+        );
+        fragment.appendChild(slides);
+      });
+    };
+    createCarouselImage(imageArray);
+    carousel.appendChild(fragment);
+  } catch (error) {
+    console.log("There is an error in fetching data:", error);
+  }
 };
 
 fetchCarousel(customeUrl("upcoming"));
 
+// carousel movie information data
 const movie_Info = (title, overview, language, popularity, release) => {
   const moviefragment = document.createDocumentFragment();
 
@@ -171,16 +173,14 @@ const movie_Info = (title, overview, language, popularity, release) => {
   return movieDetails;
 };
 
-// Carousel Logic
+// Carousel button Logic
 let currentIndex = 0;
 
 function showNextImage() {
   const slides = document.querySelectorAll(".slide");
   slides[currentIndex].classList.remove("active");
 
-  if (currentIndex < slides.length - 1) {
-    currentIndex++;
-  }
+  currentIndex = (currentIndex + 1) % slides.length;
 
   slides[currentIndex].classList.add("active");
 }
@@ -189,9 +189,7 @@ function showPrevImage() {
   const slides = document.querySelectorAll(".slide");
   slides[currentIndex].classList.remove("active");
 
-  if (currentIndex > 0) {
-    currentIndex--;
-  }
+  currentIndex = (currentIndex - 1 + slides.length) % slides.length;
 
   slides[currentIndex].classList.add("active");
 }
@@ -204,4 +202,4 @@ if (prevBtn) {
   prevBtn.addEventListener("click", showPrevImage);
 }
 
-// setInterval(showNextImage, 3000);
+setInterval(showNextImage, 4000);

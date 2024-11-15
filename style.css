@@ -181,6 +181,7 @@ body {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   display: none;
   cursor: pointer;
+  transition: opacity 1s ease-in-out;
 }
 
 .slide.active {
@@ -223,14 +224,14 @@ body {
 
 .movie-details {
   position: absolute;
-  top: 35%;
-  left: 10%;
+  top: 55%;
+  left: 5%;
   z-index: 2;
   color: var(--white-color);
 }
 
 .movie-details h1 {
-  color: rgb(255, 251, 0);
+  color: #ffc305;
   margin-bottom: 20px;
   font-size: 4rem;
   font-weight: 900;
@@ -251,7 +252,7 @@ body {
 }
 
 .genre ul li::marker {
-  color: rgb(234, 255, 0);
+  color: #ffc305;
   font-size: 1.5rem;
   font-weight: bolder;
 }
@@ -277,16 +278,6 @@ body {
 
 .slide-btns > button:active {
   transform: scale(0.8);
-}
-
-.hero-section-content {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  position: absolute;
-  top: 80%;
-  left: 10%;
-  z-index: 2;
 }
 
 .movie-details-btn {
@@ -388,10 +379,11 @@ body {
 .card {
   display: inline-block;
   border-radius: 40px;
-  height: 300px;
-  width: 220px;
+  height: 260px;
+  width: 180px;
   margin-right: 30px;
   cursor: pointer;
+  background-color: wheat;
 }
 
 .card img {
