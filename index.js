@@ -1,11 +1,13 @@
 // fetch data
 const API_KEY = "f3fbd38c0c00cefd4bd7ffeb48aa7a17";
-const API_URL = "https://api.themoviedb.org/3/movie/";
+const API_URL = "https://api.themoviedb.org/3/";
 
 // Main Containers
 const upcomingContainer = document.querySelector(".upcoming-content");
 const latestContainer = document.querySelector(".latest-content");
 const nowPlayingContainer = document.querySelector(".nowplaying-content");
+const peopleContainer = document.querySelector(".people-content");
+const video_container = document.querySelector(".video-container")
 
 // Carousel
 const prevBtn = document.querySelector(".prev-btn");
@@ -14,8 +16,8 @@ const nextBtn = document.querySelector(".next-btn");
 nextBtn.setAttribute("aria-label", "Next slide");
 
 // Default API URL
-const customeUrl = (type) => {
-  const defaultUrl = `${API_URL}${type}?language=en-US&page=1&region=IN&api_key=${API_KEY}`;
+const customeUrl = (category, type) => {
+  const defaultUrl = `${API_URL}${category}/${type}?language=en-US&page=1&region=IN&api_key=${API_KEY}`;
   return defaultUrl;
 };
 
@@ -23,7 +25,7 @@ const customeUrl = (type) => {
 const imageURL = (url) => `https://image.tmdb.org/t/p/original${url}`;
 
 // fetch data
-const fetchCardData = async (url, container) => {
+const fetchCardData = async (url, container, type) => {
   try {
     const response = await fetch(url);
 
@@ -31,24 +33,30 @@ const fetchCardData = async (url, container) => {
       throw new Error("There is some error");
     }
     const data = await response.json();
-    const imageArray = data.results;
+    const imageItems = data.results;
 
     const fragment = document.createDocumentFragment();
 
-    for (const movie of imageArray) {
-      if (!movie.backdrop_path) continue;
+    for (const item of imageItems) {
+      // console.log(movie)
+      if (type === "movie" && !item.backdrop_path) continue;
+      if (type === "person" && !item.profile_path) continue;
 
       const card = document.createElement("div");
       card.classList.add("card");
 
       const img = document.createElement("img");
-      img.src = imageURL(movie.backdrop_path);
-      img.alt = "Movie Poster";
+      img.src =
+        type === "movie"
+          ? imageURL(item.backdrop_path)
+          : imageURL(item.profile_path);
+      img.alt = type === "movie" ? "Movie Poster" : "Person Poster";
       img.loading = "lazy";
 
       const movieTitle = document.createElement("h4");
       movieTitle.classList.add("cardTitle");
-      movieTitle.textContent = movie.original_title;
+      movieTitle.textContent =
+        type === "movie" ? item.original_title : item.name;
 
       card.appendChild(img);
       card.appendChild(movieTitle);
@@ -62,9 +70,10 @@ const fetchCardData = async (url, container) => {
 };
 
 // Fetch movies for different categories
-fetchCardData(customeUrl("upcoming"), upcomingContainer);
-fetchCardData(customeUrl("popular"), latestContainer);
-fetchCardData(customeUrl("now_playing"), nowPlayingContainer);
+fetchCardData(customeUrl("movie", "upcoming"), upcomingContainer, "movie");
+fetchCardData(customeUrl("movie", "popular"), latestContainer, "movie");
+fetchCardData(customeUrl("movie", "now_playing"), nowPlayingContainer, "movie");
+fetchCardData(customeUrl("person", "popular"), peopleContainer, "person");
 
 // fetching carousel data
 
@@ -120,7 +129,7 @@ const fetchCarousel = async (url) => {
   }
 };
 
-fetchCarousel(customeUrl("upcoming"));
+fetchCarousel(customeUrl("movie", "upcoming"));
 
 // carousel movie information data
 const movie_Info = (title, overview, language, popularity, release) => {
@@ -194,12 +203,43 @@ function showPrevImage() {
   slides[currentIndex].classList.add("active");
 }
 
-if (nextBtn) {
-  nextBtn.addEventListener("click", showNextImage);
-}
+let carouselInterval;
 
-if (prevBtn) {
-  prevBtn.addEventListener("click", showPrevImage);
-}
+const startInterval = () => {
+  carouselInterval = setInterval(showNextImage, 5000);
+};
 
-setInterval(showNextImage, 4000);
+const stopInterval = () => {
+  clearInterval(carouselInterval);
+};
+
+nextBtn.addEventListener("click", () => {
+  stopInterval();
+  showNextImage();
+  startInterval();
+});
+
+prevBtn.addEventListener("click", () => {
+  stopInterval();
+  showPrevImage();
+  startInterval();
+});
+
+// featuring container
+
+const getFeatureTrailer = () => {
+  const iframe = document.createElement("iframe");
+  iframe.classList.add("trailer-video");
+  iframe.src = `https://www.youtube.com/embed/mMhDgAn_Kng?start=2`;
+  iframe.allow =
+    "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+  iframe.allowFullscreen = true;
+  video_container.appendChild(iframe);
+};
+
+getFeatureTrailer();
+
+
+// light mode 
+let body = document.getElementsByTagName("body")
+body.style.backgroundColor = 'white'

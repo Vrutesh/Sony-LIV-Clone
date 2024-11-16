@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sony LIV - Watch Indian TV Shows, Movies, Sports, Live Cricket Matches, Web Originals</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap"
@@ -36,6 +37,9 @@
             </div>
         </div>
         <div class="nav-profile">
+            <div class="nav-lightmodeBtn">
+                <button class="darkmodebtn"><i class="fa-regular fa-sun"></i></button>
+            </div>
             <div class="nav-search">
                 <img src="assets/icons/search.svg" alt="search" class="search-icon">
             </div>
@@ -46,7 +50,7 @@
     </nav>
 
     <!-- hero section  -->
-    <div class="container">
+    <main class="container">
         <div class="carousel">
             <div class="slide-btns">
                 <button class="prev-btn">
@@ -57,44 +61,52 @@
                 </button>
             </div>
         </div>
-    </div>
+    </main>
     <div class="masthead-gradient"></div>
 
     <!-- Movie Cards -->
 
     <!-- Upcoming Section  -->
-    <div class="heading-title">
+    <section class="heading-title">
         <h3>Upcoming Movies <img src="assets/icons/right_arrow.svg" alt="right-arrow" class="right-arrow"></h3>
         <div class="gradient"></div>
         <div class="card-container">
             <div class="upcoming-content content"></div>
         </div>
-    </div>
+    </section>
 
-    <!-- <div class="featuring-container">
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/mMhDgAn_Kng?start=2" class="trailer-video"></iframe>
-        </div>
+    <!-- featuring-container -->
+    <section class="featuring-container">
+        <div class="video-container"></div>
         <div class="poster-container">
             <img src="assets/movie-poster.png" alt="movie-poster">
         </div>
-    </div> -->
+    </section>
 
-    <!-- Popular Section  -->
-    <div class="heading-title">
+    <!-- Popular Peoples  -->
+    <section class="heading-title">
         <h3>Latest Movies <img src="assets/icons/right_arrow.svg" alt="right-arrow" class="right-arrow"></h3>
         <div class="card-container">
             <div class="latest-content content"></div>
         </div>
-    </div>
+    </section>
+
+    <!-- Popular Section  -->
+    <section class="heading-title">
+        <h3>Famous People <img src="assets/icons/right_arrow.svg" alt="right-arrow" class="right-arrow"></h3>
+        <!-- <div class="gradient"></div> -->
+        <div class="card-container">
+            <div class="people-content content"></div>
+        </div>
+    </section>
 
     <!-- Now Playing Section  -->
-    <div class="heading-title">
+    <section class="heading-title">
         <h3>Now Playing Movies <img src="assets/icons/right_arrow.svg" alt="right-arrow" class="right-arrow"></h3>
         <div class="card-container">
             <div class="nowplaying-content content"></div>
         </div>
-    </div>
+    </section>
 
 
     <!-- footer -->
