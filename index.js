@@ -240,6 +240,51 @@ const getFeatureTrailer = () => {
 getFeatureTrailer();
 
 
-// light mode 
-let body = document.getElementsByTagName("body")
-body.style.backgroundColor = 'white'
+
+
+// const searchUrl = (category, type, query)=>{
+//   const defaultUrl = `${API_URL}${category}/${type}?query=${query}&include_adult=false&language=en-US&page=1&api_key=${API_KEY}`
+//   return defaultUrl
+// }
+
+// const fetchSearchData = async (url) =>{
+//   try{
+//     const response = await fetch(url)
+//     if(!response.ok){
+//       throw new Error("Error");
+      
+//     }
+//     const data = await response.json()
+//     const result = data.results
+//     console.log(result)
+//   }catch (error){
+//     console.log("there is a error")
+//   }
+// } 
+// document.addEventListener("DOMContentLoaded",()=>{
+//   const searchInput = document.querySelector('.search-input');
+//   let timeout;
+//   if(searchInput){
+//     searchInput.addEventListener("input", (event) => {
+//       clearTimeout(timeout);
+
+//         timeout = setTimeout(() => {
+//           console.log("Final input value:", event.target.value);
+//         }, 1000); 
+//       const searchValue = event.target.value
+//       if(searchValue === ""){
+//         console.log([]);  }
+//         else{
+//           fetchSearchData(searchUrl("search","keyword", searchValue))
+//         }
+//       });
+//   }
+//   else{
+//     console.log("error")
+//   }
+
+//   })
+
+
+
+

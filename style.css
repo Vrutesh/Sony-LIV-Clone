@@ -130,9 +130,44 @@ body {
   z-index: 1;
 }
 
-.search-icon {
-  cursor: pointer;
+/* .nav-search{
+  display: flex;
+} */
+
+/* .nav-search input{
+  background-color: transparent;
+  color: var(--white-color);
+  border: 2px solid blue;
+  outline: none;
+  border-radius: 10px;
+  padding: 5px 10px;
 }
+.nav-search input::placeholder{
+  color: var(--white-color);
+} */
+
+.search-container {
+  position: relative;
+  width: 300px;
+}
+
+/* Style for the search input */
+.search-input {
+  width: 300px;
+  height: 30px;
+  padding: 0 10px 0 10px;
+  border: none;
+  font-size: 14px;
+  border-radius: 25px;
+  outline: none;
+}
+
+/* Placeholder styling */
+.search-input::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
 
 .avatar {
   height: 30px;
@@ -140,16 +175,7 @@ body {
   cursor: pointer;
 }
 
-.darkmodebtn{
-  background-color: transparent;
-  border: none;
-  outline: none;
-}
 
-.darkmodebtn i{
-  font-size: 25px;
-  color: rgb(216, 216, 216);
-}
 
 /* Hero section */
 .container {
@@ -563,4 +589,13 @@ footer {
 .social-media-icon img {
   padding-right: 5px;
   cursor: pointer;
+}
+
+.movie-result {
+  display: flex;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
 }
