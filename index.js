@@ -3,11 +3,9 @@ const API_KEY = "f3fbd38c0c00cefd4bd7ffeb48aa7a17";
 const API_URL = "https://api.themoviedb.org/3/";
 
 // Main Containers
-const upcomingContainer = document.querySelector(".upcoming-content");
-const latestContainer = document.querySelector(".latest-content");
-const nowPlayingContainer = document.querySelector(".nowplaying-content");
-const peopleContainer = document.querySelector(".people-content");
-const video_container = document.querySelector(".video-container")
+
+const cardsSection = document.querySelector(".cards-section");
+const video_container = document.querySelector(".video-container");
 
 // Carousel
 const prevBtn = document.querySelector(".prev-btn");
@@ -25,7 +23,7 @@ const customeUrl = (category, type) => {
 const imageURL = (url) => `https://image.tmdb.org/t/p/original${url}`;
 
 // fetch data
-const fetchCardData = async (url, container, type) => {
+const fetchCardData = async (url, type, category) => {
   try {
     const response = await fetch(url);
 
@@ -35,45 +33,96 @@ const fetchCardData = async (url, container, type) => {
     const data = await response.json();
     const imageItems = data.results;
 
+    const mainContainer = document.createElement("section");
+    mainContainer.classList.add("heading-title");
+
+    const movieCategory = document.createElement("h3");
+    movieCategory.textContent = category;
+
+    const rightArrow = document.createElement("img");
+    rightArrow.classList.add("right-arrow");
+    rightArrow.src = "assets/icons/right_arrow.svg";
+    rightArrow.loading = "lazy";
+    rightArrow.alt = "right-arrow";
+
+    movieCategory.appendChild(rightArrow);
+
+    const cardContainer = document.createElement("div");
+    cardContainer.classList.add("card-container");
+
+    const content = document.createElement("div");
+    content.classList.add("movie-content", "content");
+
     const fragment = document.createDocumentFragment();
 
     for (const item of imageItems) {
-      // console.log(movie)
+      console.log(item)
       if (type === "movie" && !item.backdrop_path) continue;
       if (type === "person" && !item.profile_path) continue;
+      if (type === "tv" && !item.backdrop_path) continue;
 
       const card = document.createElement("div");
       card.classList.add("card");
 
       const img = document.createElement("img");
-      img.src =
-        type === "movie"
-          ? imageURL(item.backdrop_path)
-          : imageURL(item.profile_path);
+
+      if (type === "movie") {
+        img.src = imageURL(item.backdrop_path);
+      } else if (type === "person") {
+        img.src = imageURL(item.profile_path);
+      } else if (type === "tv") {
+        img.src = imageURL(item.backdrop_path);
+      }
+
       img.alt = type === "movie" ? "Movie Poster" : "Person Poster";
       img.loading = "lazy";
 
+      const movieRating = document.createElement('p')
+      movieRating.classList.add("movie-rating")
+      if (item.vote_average && item.vote_average !== 0) {
+        movieRating.textContent = item.vote_average.toFixed(1); // Optional: Format to 1 decimal
+      } else {
+        movieRating.textContent = ""; // Fallback if no rating
+      }
+
+      // }else{
+      //   movieRating.textContent = item.vote_average
+      // }
+
+      
       const movieTitle = document.createElement("h4");
       movieTitle.classList.add("cardTitle");
       movieTitle.textContent =
-        type === "movie" ? item.original_title : item.name;
-
+      type === "movie" ? item.original_title : item.name;
+      
       card.appendChild(img);
+      card.appendChild(movieRating)
       card.appendChild(movieTitle);
       fragment.appendChild(card);
     }
 
-    container.appendChild(fragment);
+    content.appendChild(fragment);
+    cardContainer.appendChild(content);
+    mainContainer.appendChild(movieCategory);
+    mainContainer.appendChild(cardContainer);
+    cardsSection.appendChild(mainContainer);
   } catch (error) {
     console.log("There is an error in fetching data:", error);
   }
 };
 
 // Fetch movies for different categories
-fetchCardData(customeUrl("movie", "upcoming"), upcomingContainer, "movie");
-fetchCardData(customeUrl("movie", "popular"), latestContainer, "movie");
-fetchCardData(customeUrl("movie", "now_playing"), nowPlayingContainer, "movie");
-fetchCardData(customeUrl("person", "popular"), peopleContainer, "person");
+fetchCardData(customeUrl("movie", "upcoming"), "movie", "Upcoming Movies");
+fetchCardData(customeUrl("movie", "popular"), "movie", "Popular Movies");
+fetchCardData(customeUrl("tv", "airing_today"), "tv", "TV Shows Airing Today");
+fetchCardData(customeUrl("tv", "popular"), "tv", "Popular TV Shows");
+fetchCardData(
+  customeUrl("movie", "now_playing"),
+  "movie",
+  "Now Playing Movies"
+);
+fetchCardData(customeUrl("person", "popular"), "person", "Famous People");
+fetchCardData(customeUrl("tv", "top_rated"), "tv", "Top Rated TV Shows");
 
 // fetching carousel data
 
@@ -239,9 +288,6 @@ const getFeatureTrailer = () => {
 
 getFeatureTrailer();
 
-
-
-
 // const searchUrl = (category, type, query)=>{
 //   const defaultUrl = `${API_URL}${category}/${type}?query=${query}&include_adult=false&language=en-US&page=1&api_key=${API_KEY}`
 //   return defaultUrl
@@ -252,7 +298,7 @@ getFeatureTrailer();
 //     const response = await fetch(url)
 //     if(!response.ok){
 //       throw new Error("Error");
-      
+
 //     }
 //     const data = await response.json()
 //     const result = data.results
@@ -260,7 +306,7 @@ getFeatureTrailer();
 //   }catch (error){
 //     console.log("there is a error")
 //   }
-// } 
+// }
 // document.addEventListener("DOMContentLoaded",()=>{
 //   const searchInput = document.querySelector('.search-input');
 //   let timeout;
@@ -270,7 +316,7 @@ getFeatureTrailer();
 
 //         timeout = setTimeout(() => {
 //           console.log("Final input value:", event.target.value);
-//         }, 1000); 
+//         }, 1000);
 //       const searchValue = event.target.value
 //       if(searchValue === ""){
 //         console.log([]);  }
@@ -284,7 +330,3 @@ getFeatureTrailer();
 //   }
 
 //   })
-
-
-
-

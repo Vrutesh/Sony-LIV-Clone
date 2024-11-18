@@ -431,6 +431,13 @@ body {
   transform: scale(1.1);
 }
 
+.movie-rating{
+  position: absolute;
+  bottom: 15%;
+  padding-left: 10px;
+  color:#ffc305;
+}
+
 .cardTitle {
   color: var(--white-color);
   text-align: center;
