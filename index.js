@@ -23,9 +23,9 @@ const customeUrl = (category, type) => {
 const imageURL = (url) => `https://image.tmdb.org/t/p/original${url}`;
 
 // fetch data
-const fetchCardData = async (url, type, category) => {
+const fetchCardData = async (apiUrl, contentType, categoryName) => {
   try {
-    const response = await fetch(url);
+    const response = await fetch(apiUrl);
 
     if (!response.ok) {
       throw new Error("There is some error");
@@ -36,8 +36,14 @@ const fetchCardData = async (url, type, category) => {
     const mainContainer = document.createElement("section");
     mainContainer.classList.add("heading-title");
 
-    const movieCategory = document.createElement("h3");
-    movieCategory.textContent = category;
+    const categoryHeading = document.createElement("h3");
+    categoryHeading.textContent = categoryName;
+
+    if (categoryName === "Upcoming Movies") {
+      const gradientOverlay = document.createElement("div");
+      gradientOverlay.classList.add("gradient");
+      mainContainer.appendChild(gradientOverlay);
+    }
 
     const rightArrow = document.createElement("img");
     rightArrow.classList.add("right-arrow");
@@ -45,10 +51,10 @@ const fetchCardData = async (url, type, category) => {
     rightArrow.loading = "lazy";
     rightArrow.alt = "right-arrow";
 
-    movieCategory.appendChild(rightArrow);
+    categoryHeading.appendChild(rightArrow);
 
-    const cardContainer = document.createElement("div");
-    cardContainer.classList.add("card-container");
+    const cardsWrapper = document.createElement("div");
+    cardsWrapper.classList.add("card-container");
 
     const content = document.createElement("div");
     content.classList.add("movie-content", "content");
@@ -56,73 +62,123 @@ const fetchCardData = async (url, type, category) => {
     const fragment = document.createDocumentFragment();
 
     for (const item of imageItems) {
-      console.log(item)
-      if (type === "movie" && !item.backdrop_path) continue;
-      if (type === "person" && !item.profile_path) continue;
-      if (type === "tv" && !item.backdrop_path) continue;
+      if (contentType === "movie" && !item.backdrop_path) continue;
+      if (contentType === "person" && !item.profile_path) continue;
+      if (contentType === "tv" && !item.backdrop_path) continue;
+      const cardHolder = document.createElement("div");
+      cardHolder.classList.add("card-holder");
 
       const card = document.createElement("div");
       card.classList.add("card");
 
       const img = document.createElement("img");
 
-      if (type === "movie") {
+      if (contentType === "movie") {
         img.src = imageURL(item.backdrop_path);
-      } else if (type === "person") {
+      } else if (contentType === "person") {
         img.src = imageURL(item.profile_path);
-      } else if (type === "tv") {
+      } else if (contentType === "tv") {
         img.src = imageURL(item.backdrop_path);
       }
 
-      img.alt = type === "movie" ? "Movie Poster" : "Person Poster";
+      img.alt = contentType === "movie" ? "Movie Poster" : "Person Poster";
       img.loading = "lazy";
 
-      const movieRating = document.createElement('p')
-      movieRating.classList.add("movie-rating")
+      const movieRating = document.createElement("p");
+      movieRating.classList.add("movie-rating");
       if (item.vote_average && item.vote_average !== 0) {
-        movieRating.textContent = item.vote_average.toFixed(1); // Optional: Format to 1 decimal
+        movieRating.textContent = item.vote_average.toFixed(1);
       } else {
-        movieRating.textContent = ""; // Fallback if no rating
+        movieRating.textContent = "";
       }
 
-      // }else{
-      //   movieRating.textContent = item.vote_average
-      // }
-
-      
       const movieTitle = document.createElement("h4");
       movieTitle.classList.add("cardTitle");
       movieTitle.textContent =
-      type === "movie" ? item.original_title : item.name;
-      
+        contentType === "movie" ? item.original_title : item.name;
+
+      const watchingnowContainer = document.createElement("div");
+      watchingnowContainer.classList.add("watchContainer");
+
+      const watchNowText = document.createElement("p");
+      watchNowText.classList.add("watch-now");
+
+      const watchHeading = document.createElement("p");
+      watchHeading.classList.add("watch-heading");
+      watchHeading.textContent = "watching now";
+
+      if (contentType === "person") {
+        watchingnowContainer.style.display = "none";
+      }
+
+      if (item.vote_count <= 0) {
+        watchHeading.textContent = "To be Released";
+        watchNowText.textContent = `${(item.vote_count * 3)
+          .toString()
+          .slice(0, 3)}k`;
+      } else {
+        watchNowText.textContent = `${(item.vote_count * 3)
+          .toString()
+          .slice(0, 3)}k`;
+      }
+
+      watchingnowContainer.append(watchNowText, watchHeading);
+
       card.appendChild(img);
-      card.appendChild(movieRating)
+      card.appendChild(movieRating);
       card.appendChild(movieTitle);
-      fragment.appendChild(card);
+      card.appendChild(watchingnowContainer);
+      cardHolder.appendChild(card);
+      fragment.appendChild(cardHolder);
     }
 
     content.appendChild(fragment);
-    cardContainer.appendChild(content);
-    mainContainer.appendChild(movieCategory);
-    mainContainer.appendChild(cardContainer);
+    cardsWrapper.appendChild(content);
+    mainContainer.appendChild(categoryHeading);
+    mainContainer.appendChild(cardsWrapper);
     cardsSection.appendChild(mainContainer);
   } catch (error) {
     console.log("There is an error in fetching data:", error);
   }
 };
 
-// Fetch movies for different categories
-fetchCardData(customeUrl("movie", "upcoming"), "movie", "Upcoming Movies");
-fetchCardData(customeUrl("movie", "popular"), "movie", "Popular Movies");
-fetchCardData(customeUrl("tv", "airing_today"), "tv", "TV Shows Airing Today");
-fetchCardData(customeUrl("tv", "popular"), "tv", "Popular TV Shows");
-fetchCardData(
-  customeUrl("movie", "now_playing"),
-  "movie",
-  "Now Playing Movies"
-);
-fetchCardData(customeUrl("person", "popular"), "person", "Famous People");
-fetchCardData(customeUrl("tv", "top_rated"), "tv", "Top Rated TV Shows");
+// Fetch movies for different categories in a specific order
+const fetchDataInOrder = async () => {
+  await fetchCardData(
+    customeUrl("movie", "upcoming"),
+    "movie",
+    "Upcoming Movies"
+  );
+  await fetchCardData(
+    customeUrl("movie", "popular"),
+    "movie",
+    "Popular Movies"
+  );
+  await fetchCardData(
+    customeUrl("tv", "airing_today"),
+    "tv",
+    "TV Shows Airing Today"
+  );
+  await fetchCardData(customeUrl("tv", "popular"), "tv", "Popular TV Shows");
+  await fetchCardData(
+    customeUrl("movie", "now_playing"),
+    "movie",
+    "Now Playing Movies"
+  );
+  await fetchCardData(
+    customeUrl("person", "popular"),
+    "person",
+    "Famous People"
+  );
+  await fetchCardData(
+    customeUrl("tv", "top_rated"),
+    "tv",
+    "Top Rated TV Shows"
+  );
+};
+
+// Call the function to fetch the data in order
+fetchDataInOrder();
 
 // fetching carousel data
 

@@ -168,14 +168,11 @@ body {
   font-style: italic;
 }
 
-
 .avatar {
   height: 30px;
   border-radius: 2.1px;
   cursor: pointer;
 }
-
-
 
 /* Hero section */
 .container {
@@ -355,8 +352,7 @@ body {
 /* movie-cards */
 .heading-title {
   margin-bottom: 44px;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  padding: 16px 0;
   overflow-x: hidden;
   position: relative;
 }
@@ -368,7 +364,6 @@ body {
   align-items: center;
   gap: 10px;
   padding-left: 100px;
-  /* z-index: 10; */
 }
 .card-container {
   margin-bottom: 44px;
@@ -391,7 +386,7 @@ body {
   top: 0;
   left: 0;
   width: 2430px;
-  height: calc(100% - 35.625% - 39px); /* Adjust height as needed */
+  height: calc(100% - 35.625% - 39px); 
   background-image: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.982) 65.63%,
@@ -403,20 +398,27 @@ body {
 }
 
 .content {
-  display: inline-block;
+  display: flex;
   white-space: nowrap;
   position: relative;
   padding-left: 100px;
 }
 
+.card-holder {
+  display: flex;
+}
+
 .card {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
   border-radius: 40px;
-  height: 260px;
-  width: 180px;
+  height: auto;
+  min-height: 350px;
+  width: 200px;
   margin-right: 30px;
   cursor: pointer;
-  background-color: wheat;
+  padding: 10px;
 }
 
 .card img {
@@ -424,49 +426,52 @@ body {
   height: 100%;
   object-fit: cover;
   border-radius: 20px;
-  transition: 0.5s;
+  transition: transform 0.5s ease-in-out;
 }
 
 .card img:hover {
-  transform: scale(1.1);
-}
-
-.movie-rating{
-  position: absolute;
-  bottom: 15%;
-  padding-left: 10px;
-  color:#ffc305;
+  transform: scale(1.06);
 }
 
 .cardTitle {
   color: var(--white-color);
   text-align: center;
+  margin-top: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-rating {
+  position: absolute;
+  bottom: 25%;
+  padding-left: 1%;
+  color: #ffc305;
+}
+
+.watchContainer {
+  display: flex;
+  align-items: flex-end;
+  gap: 15px;
+}
+
+.watch-heading {
+  color: #848484;
+}
+
+.watch-now {
   margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  background: linear-gradient(45deg, #ada138, #ffb700);
+  border-radius: 5px;
+  width: 40px;
+  height: 25px;
+  font-size: 14px;
 }
-
-/* .card-previous-btn {
-  display: none;
-  width: 90px;
-  height: 240px;
-  background-color: rgba(7, 7, 7, 0.7);
-  border: none;
-  position: absolute;
-  top: 7%;
-  left: 0;
-  z-index: 2;
-}
-
-.card-next-btn {
-  display: none;
-  width: 90px;
-  height: 240px;
-  background-color: rgba(10, 10, 10, 0.7);
-  border: none;
-  position: absolute;
-  top: 7%;
-  right: 0;
-  z-index: 2;
-} */
 
 /* video container */
 
