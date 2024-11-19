@@ -5,7 +5,6 @@ const API_URL = "https://api.themoviedb.org/3/";
 // Main Containers
 
 const cardsSection = document.querySelector(".cards-section");
-const video_container = document.querySelector(".video-container");
 
 // Carousel
 const prevBtn = document.querySelector(".prev-btn");
@@ -43,6 +42,35 @@ const fetchCardData = async (apiUrl, contentType, categoryName) => {
       const gradientOverlay = document.createElement("div");
       gradientOverlay.classList.add("gradient");
       mainContainer.appendChild(gradientOverlay);
+    }
+
+    if (categoryName === "Popular TV Shows") {
+      const featuring_container = document.createElement("section");
+      featuring_container.classList.add("featuring-container");
+
+      const video_container = document.createElement("div");
+      video_container.classList.add("video-container");
+
+
+      const video_container_iframe = document.createElement("iframe");
+      video_container_iframe.classList.add("trailer-video");
+      video_container_iframe.src = `https://www.youtube.com/embed/mMhDgAn_Kng?start=2`;
+      video_container_iframe.allow =
+        "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
+      video_container_iframe.allowFullscreen = true;
+
+      video_container.appendChild(video_container_iframe);
+
+      const poster_container = document.createElement("div");
+      poster_container.classList.add("poster-container");
+
+      const poster_img = document.createElement("img");
+      poster_img.src = "assets/movie-poster.png";
+      poster_img.alt = "movie-poster";
+
+      poster_container.appendChild(poster_img);
+      featuring_container.append(video_container, poster_container);
+      mainContainer.appendChild(featuring_container);
     }
 
     const rightArrow = document.createElement("img");
@@ -177,7 +205,6 @@ const fetchDataInOrder = async () => {
   );
 };
 
-// Call the function to fetch the data in order
 fetchDataInOrder();
 
 // fetching carousel data
@@ -329,20 +356,6 @@ prevBtn.addEventListener("click", () => {
   showPrevImage();
   startInterval();
 });
-
-// featuring container
-
-const getFeatureTrailer = () => {
-  const iframe = document.createElement("iframe");
-  iframe.classList.add("trailer-video");
-  iframe.src = `https://www.youtube.com/embed/mMhDgAn_Kng?start=2`;
-  iframe.allow =
-    "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture";
-  iframe.allowFullscreen = true;
-  video_container.appendChild(iframe);
-};
-
-getFeatureTrailer();
 
 // const searchUrl = (category, type, query)=>{
 //   const defaultUrl = `${API_URL}${category}/${type}?query=${query}&include_adult=false&language=en-US&page=1&api_key=${API_KEY}`
